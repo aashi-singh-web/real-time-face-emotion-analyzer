@@ -1,25 +1,18 @@
-"""
-Real-Time Emotion Detection System
-====================================
-Uses OpenCV for face detection + DeepFace for emotion recognition.
-Logs results to CSV with timestamps.
 
-Run: python emotion_detection.py
-"""
 
 import cv2
 import csv
 import os
 from datetime import datetime
 
-# ─── 1. Try to import DeepFace ──────────────────────────────────────────────
+# ─── importing deepface 
 try:
     from deepface import DeepFace
 except ImportError:
     print("DeepFace not found. Run:  pip install deepface")
     exit(1)
 
-# ─── 2. Setup ────────────────────────────────────────────────────────────────
+# ───  setting up
 LOG_FILE   = "emotion_log.csv"
 EMOTIONS   = ["angry", "disgust", "fear", "happy", "sad", "surprise", "neutral"]
 FONT       = cv2.FONT_HERSHEY_SIMPLEX
@@ -35,7 +28,7 @@ COLOURS = {
     "neutral":  (180, 180, 180),
 }
 
-# ─── 3. CSV logger ───────────────────────────────────────────────────────────
+# ─── CSV logger
 def init_csv(path: str) -> None:
     """Create the log file with a header row if it doesn't exist."""
     if not os.path.exists(path):
@@ -53,7 +46,7 @@ def log_emotion(path: str, emotion: str, confidence: float) -> None:
         writer.writerow([ts, emotion, f"{confidence:.1f}"])
 
 
-# ─── 4. Face + emotion detection ─────────────────────────────────────────────
+# ─── Face + emotion detection 
 def analyse_frame(frame):
     """
     Run DeepFace on a BGR frame.
@@ -73,7 +66,7 @@ def analyse_frame(frame):
         return []
 
 
-# ─── 5. Draw overlay ─────────────────────────────────────────────────────────
+# ─── drawing overlay 
 def draw_overlay(frame, results):
     """Draw bounding box + emotion label on the frame."""
     for r in results:
@@ -88,21 +81,21 @@ def draw_overlay(frame, results):
         colour  = COLOURS.get(top_emotion, (255, 255, 255))
         label   = f"{top_emotion.upper()}  {confidence:.0f}%"
 
-        # Bounding box
+        
         cv2.rectangle(frame, (x, y), (x + w, y + h), colour, 2)
 
-        # Label background pill
+       
         (tw, th), _ = cv2.getTextSize(label, FONT, 0.6, 2)
         cv2.rectangle(frame, (x, y - th - 12), (x + tw + 10, y), colour, -1)
 
-        # Label text
+        
         cv2.putText(frame, label, (x + 5, y - 6),
                     FONT, 0.6, (0, 0, 0), 2, cv2.LINE_AA)
 
     return frame
 
 
-# ─── 6. Accuracy summary from log ────────────────────────────────────────────
+# ─── Accuracy summary from log
 def print_accuracy_summary(path: str) -> None:
     """Print a basic count of each emotion from the saved log."""
     if not os.path.exists(path):
@@ -135,11 +128,11 @@ def print_accuracy_summary(path: str) -> None:
     print("═" * 40 + "\n")
 
 
-# ─── 7. Main loop ─────────────────────────────────────────────────────────────
+# main loop
 def main():
     init_csv(LOG_FILE)
 
-    cap = cv2.VideoCapture(0)          # 0 = default webcam
+    cap = cv2.VideoCapture(0)         
     if not cap.isOpened():
         print("[ERROR] Cannot open webcam. Check your camera connection.")
         return
@@ -147,10 +140,10 @@ def main():
     print("[INFO] Webcam opened. Press  Q  to quit.")
 
     frame_count  = 0
-    analyse_every = 5                  # analyse every N frames for speed
+    analyse_every = 5                 
 
-    last_results  = []                 # cache results between analysed frames
-    last_logged   = ""                 # avoid duplicate log rows
+    last_results  = []                 
+    last_logged   = ""                
 
     while True:
         ret, frame = cap.read()
@@ -176,10 +169,10 @@ def main():
                     log_emotion(LOG_FILE, top_emotion, confidence)
                     last_logged = entry_key
 
-        # Draw overlay on every frame so the video stays smooth
+        
         output = draw_overlay(frame.copy(), last_results)
 
-        # HUD: instructions
+        
         cv2.putText(output, "Press Q to quit", (10, 28),
                     FONT, 0.55, (230, 230, 230), 1, cv2.LINE_AA)
 
@@ -195,6 +188,6 @@ def main():
     print_accuracy_summary(LOG_FILE)
 
 
-# ─── Entry point ─────────────────────────────────────────────────────────────
+
 if __name__ == "__main__":
     main()
