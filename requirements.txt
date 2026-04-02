@@ -1,0 +1,6 @@
+# Real-Time Emotion Detection — requirements
+# Install with:  pip install -r requirements.txt
+
+opencv-python>=4.8
+deepface>=0.0.93
+tf-keras>=2.16          # backend for DeepFace (TensorFlow 2.x)
