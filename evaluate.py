@@ -1,14 +1,3 @@
-"""
-Emotion Log Analyser
-=====================
-Reads emotion_log.csv and shows a detailed accuracy/frequency report.
-Optionally compare against a ground-truth CSV you label yourself.
-
-Usage:
-    python evaluate.py                          # summary only
-    python evaluate.py --ground-truth gt.csv    # with accuracy score
-"""
-
 import csv
 import os
 import argparse
