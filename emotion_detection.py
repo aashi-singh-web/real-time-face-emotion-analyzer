@@ -92,7 +92,6 @@ def draw_overlay(frame, results):
 
 # ─── Accuracy summary from log
 def print_accuracy_summary(path: str) -> None:
-    """Print a basic count of each emotion from the saved log."""
     if not os.path.exists(path):
         print("[INFO] No log file found.")
         return
@@ -148,11 +147,11 @@ def main():
 
         frame_count += 1
 
-        # Only run the (slow) DeepFace call every few frames
+        
         if frame_count % analyse_every == 0:
             last_results = analyse_frame(frame)
 
-            # Log only when top emotion changes
+           
             for r in last_results:
                 emotions    = r.get("emotion", {})
                 if not emotions:
