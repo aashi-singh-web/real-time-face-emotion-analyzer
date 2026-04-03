@@ -37,7 +37,7 @@ def init_csv(path: str) -> None:
 
 
 def log_emotion(path: str, emotion: str, confidence: float) -> None:
-    """Append one detection row to the CSV."""
+    
     ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open(path, "a", newline="") as f:
         writer = csv.writer(f)
@@ -46,15 +46,12 @@ def log_emotion(path: str, emotion: str, confidence: float) -> None:
 
 # ─── Face + emotion detection 
 def analyse_frame(frame):
-    """
-    Run DeepFace on a BGR frame.
-    Returns list of dicts, each with keys: region, emotion, confidence.
-    """
+    
     try:
         results = DeepFace.analyze(
             frame,
             actions=["emotion"],
-            enforce_detection=False,   # don't crash if no face found
+            enforce_detection=False,   
             silent=True,
         )
         if not isinstance(results, list):
