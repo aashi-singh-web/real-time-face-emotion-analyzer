@@ -90,7 +90,7 @@ def draw_overlay(frame, results):
     return frame
 
 
-# ─── Accuracy summary from log
+# ─── accuracy summary from log
 def print_accuracy_summary(path: str) -> None:
     if not os.path.exists(path):
         print("[INFO] No log file found.")
