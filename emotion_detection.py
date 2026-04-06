@@ -28,7 +28,7 @@ COLOURS = {
 
 # ─CSV logger
 def init_csv(path: str) -> None:
-    """Create the log file with a header row if it doesn't exist."""
+    
     if not os.path.exists(path):
         with open(path, "w", newline="") as f:
             writer = csv.writer(f)
