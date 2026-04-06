@@ -3,14 +3,14 @@ import csv
 import os
 from datetime import datetime
 
-# ─── importing deepface 
+# importing deepface 
 try:
     from deepface import DeepFace
 except ImportError:
     print("DeepFace not found. Run:  pip install deepface")
     exit(1)
 
-# ───  setting up
+# setting up
 LOG_FILE   = "emotion_log.csv"
 EMOTIONS   = ["angry", "disgust", "fear", "happy", "sad", "surprise", "neutral"]
 FONT       = cv2.FONT_HERSHEY_SIMPLEX
@@ -26,7 +26,7 @@ COLOURS = {
     "neutral":  (180, 180, 180),
 }
 
-# ─── CSV logger
+# ─CSV logger
 def init_csv(path: str) -> None:
     """Create the log file with a header row if it doesn't exist."""
     if not os.path.exists(path):
@@ -44,7 +44,7 @@ def log_emotion(path: str, emotion: str, confidence: float) -> None:
         writer.writerow([ts, emotion, f"{confidence:.1f}"])
 
 
-# ─── Face + emotion detection 
+#  face + emotion detection 
 def analyse_frame(frame):
     
     try:
@@ -61,7 +61,7 @@ def analyse_frame(frame):
         return []
 
 
-# ─── drawing overlay 
+# - drawing overlay 
 def draw_overlay(frame, results):
     """Draw bounding box + emotion label on the frame."""
     for r in results:
@@ -90,7 +90,7 @@ def draw_overlay(frame, results):
     return frame
 
 
-# ─── accuracy summary from log
+#  accuracy summary from log
 def print_accuracy_summary(path: str) -> None:
     if not os.path.exists(path):
         print("[INFO] No log file found.")
